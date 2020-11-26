@@ -1,2 +1,2 @@
-# fyp
-This is my fyp project
+# Fyp
+This is my fyp project.
