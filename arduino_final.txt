@@ -1,0 +1,107 @@
+firebase library
+#include Firebase.h
+#include FirebaseArduino.h
+#include FirebaseHttpClient.h
+
+#include LiquidCrystal.h
+
+#includeSPI.h
+#includeLoRa.h
+#include ArduinoJson.h
+#include ESP8266WiFi.h
+#include ESP8266HTTPClient.h
+
+#define NSS D10
+#define RESET D14
+#define dio0 D2
+
+
+firebase connection
+#define FIREBASE_HOST fyp-lorawan.firebaseio.com
+#define FIREBASE_AUTH hfOxGmTwmwe1vaYILY8wpkq5sB1FcBEteomMjVpy
+
+ wifi connection
+const char ssid = irwan;
+const char wifiPassword = kk123456;
+
+split data function
+String getValue(String data, char separator, int index){
+  int found = 0;
+  int strIndex[] = {0, -1};
+  int maxIndex = data.length()-1;
+
+  for(int i=0; imaxIndex && found=index; i++){
+    if(data.charAt(i)==separator  i==maxIndex){
+      found++;
+      strIndex[0] = strIndex[1]+1;
+      strIndex[1] = (i ==maxIndex)  i+1  i;
+    }
+  }
+  return foundindex  data.substring(strIndex[0], strIndex[1])  ;
+}
+
+
+void setup() {
+      Serial.begin(9600);
+      while(!Serial);
+      Serial.println(Lora Receiver);
+      LoRa.setPins(NSS, RESET,dio0);
+      if (!LoRa.begin(433E6)){
+        Serial.println(Lora Start FAILED);
+        while (1);
+       }
+      
+       WiFi.begin(ssid, wifiPassword);
+       while (WiFi.status() != WL_CONNECTED) {  
+        delay(2000);
+        Serial.println(Connecting to a wifi network..);
+      }
+        Serial.println(Connected to the network);
+      Firebase.begin(FIREBASE_HOST, FIREBASE_AUTH);
+      lcd.begin(16, 2);
+      
+}
+
+void loop() {
+      if (WiFi.status() == WL_CONNECTED) {
+      int packetSize = LoRa.parsePacket();            parse packet
+    
+      if(packetSize){                
+       while(LoRa.available()){                  read packet
+
+      String incoming = LoRa.readString();      temperature sensor
+      String turbidity = LoRa.readString();     turbidity sensor    
+      String ph = LoRa.readString();          ph sensor
+  
+      String myTemperature = getValue(incoming, ' ', 0 );
+    Serial.print(myTemperature);
+      String myTurbidity = getValue(incoming, ' ', 1 );
+      String myPh = getValue(incoming, ' ', 2 );
+      
+       send to firebase in float
+      float floatpH = myPh.toFloat();  
+      float floatTemp = myTemperature.toFloat();  
+      int intTurb = myTurbidity.toInt();  
+           
+      if(!incoming){                   
+        Serial.print(The lora is not connected);      
+        }
+      else{
+        Serial.println(Received packets, );
+        Serial.println(The temperature is  + myTemperature +  C, turbidity  + myTurbidity +  NTU and the pH value is  + myPh); 
+        Serial.println();  
+        delay(2000);
+        Firebase.setString(Temperature, myTemperature);  
+        Firebase.setString(Turbidity, myTurbidity);  
+        Firebase.setString(Ph, myPh);  
+        
+          String floatPh = Firebase.pushFloat(Ph, floatpH);
+          String floatTemperature = Firebase.pushFloat(Temperature, floatTemp);
+          String intTurbidity = Firebase.pushFloat(Turbidity, intTurb);
+        
+        } 
+      }
+    
+   }
+ }
+}
