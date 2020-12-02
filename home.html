@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="home.css">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,600;1,700&display=swap" rel="stylesheet"><!-- font change -->
+
+    <script src="https://www.gstatic.com/firebasejs/ui/4.6.1/firebase-ui-auth.js"></script>
+    <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/4.6.1/firebase-ui-auth.css" />
+    
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">       <!-- material design lite -->
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.teal-blue.min.css" />
+    <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>                  
+   
+    <title>FYP 521D</title>
+
+
+</head>
+<body>
+    <!-- login dialog -->
+    <dialog id="loginDialog" class="mdl-dialog" style="width: 25%;">
+        <div class="modal-dialog">
+            <img id="iium" src="img/iium.jpg" alt="" style="max-width:350px; height: 100px;">
+        </div>
+        <h4 class="mdl-dialog__title" style="font-size:1.6em;" >Sign In</h4>
+        <h6 class="mdl-dialog__title" style="font-size: 1.1em; padding:10px; margin:0px;">to continue to Monitoring System.</h6>
+        <div class="mdl-dialog__content">
+            <p id="loginError" style="color:red;"></p>
+            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                <input class="mdl-textfield__input" type="text" id="loginEmail">
+                <label class="mdl-textfield__label" for="sample3">Email or phone</label>
+            </div>
+             <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                <input class="mdl-textfield__input" type="password" id="loginPassword">
+                <label class="mdl-textfield__label" for="sample3">Enter your password</label>
+            </div>
+        </div>
+        <div class="mdl-dialog__actions">
+           <button id="loginBtn" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect">
+            Sign In <span class="button-right-icon material-icons">login</span>
+            </button>
+            <div id="loginProgress" class="mdl-spinner mdl-js-spinner is-active"></div>
+        </div>
+    </dialog>
+    
+    <!-- login cover page -->
+    <div class="login-cover">
+        <!-- MDL Spinner Component -->
+        <div class="page-loader mdl-spinner mdl-js-spinner is-active"></div>
+        <img src="img/wallpaper.jpg" alt="" style="width:100%; height: 100vh;">
+    </div>
+
+    <!-- Always shows a header, even in smaller screens. -->
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+    <header class="mdl-layout__header">
+        <div class="mdl-layout__header-row">
+        <!-- Title -->
+            <span class="mdl-layout-title" >521D
+                <span class="page-title-span"> | </span>
+                <span class="page-title-span"> HOME </span>
+            </span>
+        <!-- Add spacer, to align navigation to the right -->
+        <div class="mdl-layout-spacer"></div>
+        <!-- Navigation. We hide it in small screens. -->
+        <nav class="navbar mdl-navigation mdl-layout--large-screen-only">
+            <a class="active mdl-navigation__link" href="home.html" >HOME</a>
+            <a class="mdl-navigation__link" href="graph.html">GRAPH</a>
+            <a class="mdl-navigation__link" href="#">ABOUT US</a>
+            <!-- Accent-colored raised button with ripple -->
+           <!-- Primary-colored flat button -->
+            <!-- Accent-colored flat button -->
+            <button id="signOutButton" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect">
+            Sign Out <span class="button-right-icon material-icons">account_circle</span>
+            </button>
+        </nav>
+        </div>
+    </header>
+
+    <div class="mdl-layout__drawer">
+        <!-- <span class="mdl-layout-title">Water Monitoring System</span> -->
+        <nav class="mdl-navigation">
+            <a class="mdl-navigation__link" href="home.html">HOME</a>
+            <a class="mdl-navigation__link" href="graph.html">GRAPH</a>
+            <a class="mdl-navigation__link" href="">ABOUT US</a>
+        </nav>
+    </div>
+
+    <main class="mdl-layout__content" style="flex: 1 0 auto;">
+        <div class="page-content" style="height: 100vh; width:100vw;"><!-- Your content goes here -->
+          <h1>What We Do</h1>
+        
+    </main>
+    
+    </div>
+
+    
+    <!-- end of material design -->
+
+
+<!-- The core Firebase JS SDK is always required and must be listed first  -->
+<!-- firebase  -->
+<script src="https://www.gstatic.com/firebasejs/8.1.1/firebase.js"></script>
+<script src='https://cdn.firebase.com/js/client/2.2.1/firebase.js'></script>
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+<script src="https://www.gstatic.com/firebasejs/8.1.1/firebase-analytics.js"></script>
+
+<script>
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  var firebaseConfig = {
+    apiKey: "AIzaSyDUkQW-_EZoZ5ylxPfjQAJ6rDcWhMxyZUs",
+    authDomain: "fyp-lorawan.firebaseapp.com",
+    databaseURL: "https://fyp-lorawan.firebaseio.com",
+    projectId: "fyp-lorawan",
+    storageBucket: "fyp-lorawan.appspot.com",
+    messagingSenderId: "572123527896",
+    appId: "1:572123527896:web:387309413d0f0d4d9475ad",
+    measurementId: "G-Z2NBVSTGCW"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  firebase.analytics();
+</script>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>   <!-- jquery -->
+<script src="home.js"></script>
+<!-- <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script> chart script -->
+
+</body>
+
+</html>
