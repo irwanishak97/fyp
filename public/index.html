@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- css -->
+    <link rel="stylesheet" href="index.css">
+
+    <!-- font -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,600;1,700&display=swap" rel="stylesheet">
+    
+    <!-- jquery -->
+    <!-- <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>    -->
+    <script
+    src="https://code.jquery.com/jquery-3.5.1.min.js"
+    integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
+    crossorigin="anonymous">
+    </script>
+
+    <!-- firebase -->
+    <script src="https://www.gstatic.com/firebasejs/ui/4.6.1/firebase-ui-auth.js"></script>
+    <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/4.6.1/firebase-ui-auth.css" />
+    
+     <!-- logo -->
+    <script src="https://use.fontawesome.com/e28227a857.js"></script>
+
+    <!-- material design lite -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">       
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.teal-blue.min.css" />
+    <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>                  
+   
+    <!-- bootstrap -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script> 
+    
+    <title>FYP 521D</title>
+
+
+</head>
+<body>
+    <!-- login dialog -->
+    <dialog id="loginDialog" class="mdl-dialog" style="width: 25%;">
+        <div class="modal-dialog">
+            <img id="iium" src="img/iium.jpg" alt="" style="max-width:350px; height: 100px;">
+        </div>
+        <h4 class="mdl-dialog__title" style="font-size:1.6em;" >Sign In</h4>
+        <h6 class="mdl-dialog__title" style="font-size: 1.1em; padding:10px; margin:0px;">to continue to Monitoring System.</h6>
+        <div class="mdl-dialog__content">
+            <p id="loginError" style="color:red;"></p>
+            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                <input class="mdl-textfield__input" type="text" id="loginEmail">
+                <label class="mdl-textfield__label" for="sample3">Email or phone</label>
+            </div>
+             <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                <input class="mdl-textfield__input" type="password" id="loginPassword">
+                <label class="mdl-textfield__label" for="sample3">Enter your password</label>
+            </div>
+        </div>
+        <div class="mdl-dialog__actions">
+           
+            <button id="loginBtn" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect">
+            Sign In <span class="button-right-icon material-icons">login</span>
+            </button>
+            <div id="loginProgress" class="mdl-spinner mdl-js-spinner is-active"></div>
+
+            <!-- guess only -->
+            <button id="guessBtn" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect mdl-color--light-blue-900">
+            guess only <span class="button-right-icon material-icons">login</span>
+            </button>
+        </div>
+    </dialog>
+    
+    <!-- login cover page -->
+    <div class="login-cover">
+        <!-- MDL Spinner Component -->
+        <div class="page-loader mdl-spinner mdl-js-spinner is-active"></div>
+    </div>      
+        
+
+    <!-- Always shows a header, even in smaller screens. -->
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header header ">
+        <header class="mdl-layout__header">
+            <div class="mdl-layout__header-row"> <!-- boleh fixed-top -->
+            <!-- Title -->
+                <a href="index.html" style="text-decoration: none; color:white;">
+                    <span class="mdl-layout-title" >521D
+                    <span class="page-title-span"> | </span>
+                    <span class="page-title-span"> HOME </span>
+                    </span>
+                </a>
+                
+            <!-- Add spacer, to align navigation to the right -->
+            <div class="mdl-layout-spacer "></div>
+            <!-- Navigation. We hide it in small screens. -->
+            <nav class="navbar mdl-navigation mdl-layout--large-screen-only  ">
+                <a class="active mdl-navigation__link " href="index.html" >HOME</a>
+                <a class="mdl-navigation__link" href="graph.html">GRAPH</a>
+                <a class="mdl-navigation__link" href="contact.html">CONTACT US</a>
+                <!-- Accent-colored raised button with ripple -->
+                <!-- Primary-colored flat button -->
+                <!-- Accent-colored flat button -->
+                <button id="signOutButton" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect">
+                Sign Out <span class="button-right-icon material-icons">account_circle</span>
+                </button>
+            </nav>
+            </div>
+        </header>
+
+        <div class="mdl-layout__drawer">
+            <!-- <span class="mdl-layout-title">Water Monitoring System</span> -->
+            <nav class="mdl-navigation">
+                <a class="mdl-navigation__link" href="index.html">HOME</a>
+                <a class="mdl-navigation__link" href="graph.html">GRAPH</a>
+                <a class="mdl-navigation__link" href="contact.html">CONTACT US</a>
+            </nav>
+        </div>
+
+        <main class="mdl-layout__content" style="flex: 1 0 auto;">
+            <div class="page-content"><!-- Your content goes here -->
+
+                <div class="main-wrapper first-section" id="section1">
+                    <div class="section">
+                        <div class="kotak1"> 
+                            <h1 class="font-weight-bold">We are from <span style="color: orange; font-size: 4rem;">521D</span></h1>
+                            <h4>We design and develop <span style="font-size: 3rem; font-weight:bold;">LoRaWAN</span> for Water Monitoring System</h4> 
+                        </div>
+                        <div class="butang">
+                            <button class="btn btn-outline-info button-class"><a href="#section2" class="text-white text" style="text-decoration: none;">Why use LoRa?</a>
+                            </button>    
+                        </div>
+                    </div>
+                </div>
+
+                <div class="main-wrapper second-section h-100"  id="section2">
+                    <div class="section">
+                        <div>
+                            <h1 class="pt-5">
+                                Why use <span>LoRa?</span>
+                            </h1>
+                            <div class="astrodivider"><div class="astrodividermask"></div><span><i>&#10038;</i></span></div>        <!-- divider -->
+
+                            <h5 class="text-muted">Lora enables data communication over a long range while using very little network and power.</h5>
+                            
+                        </div>
+                        
+                        <div class="container-fluid p-5">
+                            <div class="row">
+                                <div class="col-lg-4 col-xs-12 pt-5 pb-5">
+                                    <div class="media">
+                                        <span class="material-icons logo align-self-center mr-3" style="font-size: 36px;" >
+                                            batch_prediction
+                                        </span>
+                                         <div class="media-body">
+                                            <h5 class="mt-0">ONE-STOP SOLUTION</h5>
+                                            <p>We provide end-to-end latest technological solutions to solve your critical problems</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-xs-12 pt-5 pb-5">
+                                    <div class="media">
+                                        <span class="material-icons logo align-self-center mr-3" style="font-size: 36px;">
+                                            notifications
+                                        </span>
+                                        <div class="media-body">
+                                            <h5 class="mt-0">INNOVATIVE</h5>
+                                            <p>In-house innovation offer greater flexibility in configuration, meeting industrial standards and requirements</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-lg-4 col-xs-12 pt-5 pb-5">
+                                    <div class="media">
+                                        <span class="material-icons logo align-self-center mr-3" style="font-size: 36px;">
+                                            timer
+                                        </span>
+                                        <div class="media-body">
+                                            <h5 class="mt-0">TIME EFFICIENT</h5>
+                                            <p>High data collection efficiency with huge area coverage offers fast and reliable data for planning and decision making</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        
+                            <div class="row">
+                                <div class="col-lg-4 col-xs-12 pt-5 pb-5">
+                                    <div class="media">
+                                        <span class="material-icons logo align-self-center mr-3" style="font-size:36px;">
+                                            backup
+                                        </span>
+                                        <div class="media-body">
+                                            <h5 class="mt-0">DATA ACCESSIBILITY</h5>
+                                            <p>Cloud-based solutions enable data to be accessed on web or mobile, anytime & anywhere</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-xs-12 pt-5 pb-5">
+                                    <div class="media">
+                                        <span class="material-icons logo align-self-center mr-3" style="font-size:36px;">
+                                            arrow_downward
+                                        </span>
+                                        <div class="media-body">
+                                            <h5 class="mt-0">LOW RISK</h5>
+                                            <p>Low human interventions - reducing human error, mobilization, and manpower</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-xs-12 pt-5 pb-5">
+                                    <div class="media">
+                                        <span class="material-icons logo align-self-center mr-3" style="font-size:36px;">
+                                            science
+                                        </span> 
+                                        <div class="media-body">
+                                            <h5 class="mt-0">CUSTOMIZED SOLUTIONS</h5>
+                                            <p>Highly customizable, in-house solutions to meet your diverse needs and requirements</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-4 col-xs-12 pt-5 pb-5">
+                                    <div class="media">
+                                        <span class="material-icons logo align-self-center mr-3" style="font-size:36px;">
+                                                monetization_on
+                                        </span>
+                                        <div class="media-body">
+                                            <h5 class="mt-0">COST EFFECTIVE</h5>
+                                            <p>Significant cost-saving potential against conventional methods</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-xs-12 pt-5 pb-5">
+                                    <div class="media">
+                                        <span class="material-icons logo align-self-center mr-3" style="font-size:36px;">
+                                             poll
+                                        </span>
+                                        <div class="media-body">
+                                            <h5 class="mt-0">DATA TRANSPARENCY</h5>
+                                            <p>We offer comprehensive data to stakeholders</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-lg-4 col-xs-12 pt-5 pb-5">
+                                    <div class="media">
+                                        <span class="material-icons logo align-self-center mr-3" style="font-size:36px;">
+                                                insights
+                                        </span>
+                                        <div class="media-body">
+                                            <h5 class="mt-0">DATA INTEGRATION</h5>
+                                            <p>Data compatibility to integrate with other existing software or database</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- end of second section -->
+
+
+                 <div class="main-wrapper third-section h-100"  id="section3">
+                    <div class="section">
+                        <div>
+                            <h1>
+                                What we do?
+                            </h1>
+                            <div class="astrodivider"><div class="astrodividermask"></div><span><i>&#10038;</i></span></div>        <!-- divider -->                            
+                        </div>
+
+                        <div class="card-deck p-5">
+                            <div class="card">
+                                <img class="card-img-top p-4" src="img/chart.jpg" alt="Card image cap">
+                                <div class="card-body text-center">
+                                <h5 class="card-title" >Graph live update</h5>
+                                <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                                <div class="butang">
+                                    <button class="btn btn-outline-info button-class"><a href="graph.html" class="text-dark text" style="text-decoration: none;">Graph live update</a>
+                                    </button>    
+                                </div>
+                            </div>
+                            </div>
+                            <div class="card">
+                                <img class="card-img-top p-4" src="img/friendly-ui.jpg" alt="Card image cap">
+                                <div class="card-body text-center">
+                                <h5 class="card-title">Friendly User interface</h5>
+                                <p class="card-text">This card has supporting text below as a natural lead-in to additional content.</p>                             
+                                <div class="butang">
+                                    <button class="btn button-class" disabled><a class="text-muted text" style="text-decoration: none;">Coming soon!</a>
+                                    </button>    
+                                </div>    
+                            </div>
+                            </div>
+                            <div class="card">
+                                <img class="card-img-top p-4" src="img/lora.jpg" alt="Card image cap">
+                                <div class="card-body text-center">
+                                <h5 class="card-title">The use of Lora</h5>
+                                <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This card has even longer content than the first to show that equal height action.</p>
+                                <div class="butang">
+                                    <button class="btn button-class" disabled><a class="text-muted text" style="text-decoration: none;">Coming soon!</a>
+                                    </button>    
+                                </div>
+                            </div>
+                            </div>
+                            <div class="card">
+                                <img class="card-img-top p-4" src="img/real-life.jpg" alt="Card image cap">
+                                <div class="card-body text-center">
+                                <h5 class="card-title">Real life test</h5>
+                                <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This card has even longer content than the first to show that equal height action.</p>
+                                <div class="butang">
+                                    <button class="btn button-class" disabled><a class="text-muted text" style="text-decoration: none;">Coming soon!</a>
+                                    </button>    
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- end of third section -->
+
+                <!-- footer start -->
+                  <footer class="mdl-mini-footer site-footer">
+                    <div class="container">
+                        <div class="row">
+                        <div class="col-sm-12 col-md-6">
+                            <h6>About</h6>
+                            <p class="text-justify">
+                            We are a high end specialty IT solutions provider for Lora Technology. Join the
+                            revolution today by sign up our products. We help customers make decision
+                            based on real-time data from IoT sensors.
+                            </p>
+                        </div>
+
+                        <div class="col-xs-6 col-md-3">
+                        
+                        </div>
+
+                        <div class="col-xs-6 col-md-3">
+                            <h6>Quick Links</h6>
+                            <ul class="footer-links">
+                            <li><a href="index.html">HOME</a></li>
+                            <li><a href="graph.html">GRAPH</a></li>
+                            <li><a href="contact.html">CONTACT US</a></li>
+                            </ul>
+                        </div>
+                        </div>
+                        <hr>
+                    </div>
+                    <div class="container">
+                        <div class="row">
+                        <div class="col-md-8 col-sm-6 col-xs-12">
+                            <p class="copyright-text">Copyright &copy; 2020 All Rights Reserved by 
+                                <a href="index.html">521D</a>.
+                            </p>
+                        </div>
+
+                        <div class="col-md-4 col-sm-6 col-xs-12">
+                            <ul class="social-icons">
+                            <li><a class="facebook" href="#"><i class="fa fa-facebook"></i></a></li>
+                            <li><a class="twitter" href="#"><i class="fa fa-twitter"></i></a></li>
+                            <li><a class="linkedin" href="#"><i class="fa fa-linkedin"></i></a></li>   
+                            </ul>
+                        </div>
+                        </div>
+                    </div>
+                </footer>   
+                <!-- footer end -->
+        </main>
+    </div>
+
+    
+    <!-- end of material design -->
+
+
+<!-- The core Firebase JS SDK is always required and must be listed first  -->
+<!-- firebase  -->
+<script src="https://www.gstatic.com/firebasejs/8.1.1/firebase.js"></script>
+<script src='https://cdn.firebase.com/js/client/2.2.1/firebase.js'></script>
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+<script src="https://www.gstatic.com/firebasejs/8.1.1/firebase-analytics.js"></script>
+
+<script>
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  var firebaseConfig = {
+    apiKey: "AIzaSyDUkQW-_EZoZ5ylxPfjQAJ6rDcWhMxyZUs",
+    authDomain: "fyp-lorawan.firebaseapp.com",
+    databaseURL: "https://fyp-lorawan.firebaseio.com",
+    projectId: "fyp-lorawan",
+    storageBucket: "fyp-lorawan.appspot.com",
+    messagingSenderId: "572123527896",
+    appId: "1:572123527896:web:387309413d0f0d4d9475ad",
+    measurementId: "G-Z2NBVSTGCW"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  firebase.analytics();
+</script>
+
+
+<script src="index.js"></script>
+<!-- <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script> chart script -->
+
+</body>
+
+</html>
